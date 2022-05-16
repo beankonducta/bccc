@@ -8,49 +8,79 @@
   <link rel="icon" type="image/x-icon" href="Images/favicon.png">
   <meta property="og:image" content="Images/social.png">
   <meta property="og:image:type" content="image/png">
-  <!-- add axios -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
 
   <script>
-    // Direct api calls to chess.com and lichess to pull live MMR data (or whatever else we want)
-    // TODO: add user array and iterate thru
-
-      // LICHESS API CALL
-      function lichessCall(user) {
-        fetch(`https://lichess.org/api/user/${user}`)
-          .then((r) => r.json())
-          .then((data) => {
-            // sets our <td> with id caboyd to classical rating on Lichess
-            // changing the 'perf' to bullet etc will pull from other game types
-            // or we could average across all or something
-            document.getElementById(user).innerHTML = data.perfs.classical.rating;
-          })
-          .catch((e) =>  document.getElementById(user).innerHTML = "NO DATA");
-      }
-
-      // CHESS.COM API CALL
-      // USER must also be the ID of the <td> you want to update
-      function chessDotComCall(user) {
-        fetch(`https://api.chess.com/pub/player/${user}/stats`)
-          .then((r) => r.json())
-          .then((data) => {
-            // sets our <td> with provided id to chess_rapid rating on Chess.com
-            // could specify a different game type or do some averaging
-            document.getElementById(user).innerHTML = data.chess_rapid.last.rating;
-          })
-          .catch((e) => document.getElementById(user).innerHTML = "NO DATA");
-      }
+    var players = [
+      { name: "Carter B.", irl_mmr: "1294", web_mmr: "Loading..", win: 8, loss: 2, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
+      { name: "Jackson G.", irl_mmr: "1251", web_mmr: "Loading..", win: 5, loss: 2, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
+      { name: "Eric C.", irl_mmr: "1221", web_mmr: "Loading..", win: 3, loss: 2, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
+      { name: "Drew V.", irl_mmr: "1199", web_mmr: "Loading..", win: 1, loss: 1, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
+      { name: "Tyler D.", irl_mmr: "1194", web_mmr: "Loading..", win: 3, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
+      { name: "Sienna D", irl_mmr: "1192", web_mmr: "Loading..", win: 0, loss: 1, tie: 0, li_profile: "", com_profile: "", handle: "siennad" },
+      { name: "Matt M.", irl_mmr: "1164", web_mmr: "Loading..", win: 1, loss: 3, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
+      { name: "Patrick A.", irl_mmr: "1162", web_mmr: "Loading..", win: 0, loss: 2, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
+      { name: "Harrison P.", irl_mmr: "1161", web_mmr: "Loading..", win: 0, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp" }
+    ];
+    function buildProfileText(player) {
+      if (player.li_profile !== "" && player.com_profile !== "")
+        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a> / <a href="https://chess.com/member${player.com_profile}">Chess.com</a></td>`;
+      else if (player.li_profile !== "")
+        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a></td>`;
+      else if (player.com_profile !== "")
+        return `<td><a href="https://chess.com/member${player.com_profile}">Chess.com</a></td>`;
+      else return `<td>...</td>`;
+    }
+    function sortPlayers() {
+      players.sort((a, b) => {
+        if (a.irl_mmr > b.irl_mmr) return -1;
+        if (b.irl_mmr > a.irl_mmr) return 1;
+        return 0;
+      });
+    }
+    function lichessCall(player) {
+      fetch(`https://lichess.org/api/user/${player.li_profile}`)
+        .then((r) => r.json())
+        .then((data) => {
+          document.getElementById(player.handle).innerHTML = data.perfs.classical.rating;
+        })
+        .catch((e) => document.getElementById(player.handle).innerHTML = "NO DATA");
+    }
+    function chessDotComCall(player) {
+      fetch(`https://api.chess.com/pub/player/${player.com_profile}/stats`)
+        .then((r) => r.json())
+        .then((data) => {
+          document.getElementById(player.handle).innerHTML = data.chess_rapid.last.rating;
+        })
+        .catch((e) => document.getElementById(player.handle).innerHTML = "NO DATA");
+    }
+    function addRow(player) {
+      var newRow = document.getElementById('player-table').insertRow();
+      newRow.innerHTML = `
+            <td>${player.name}</td>
+            <td>${player.irl_mmr}</td>
+            <td id="${player.handle}">${player.web_mmr}</td>
+            <td>${player.win}/${player.loss}/${player.tie}</td>
+            ${buildProfileText(player)}
+        `;
+    }
     window.addEventListener('load', () => {
-      chessDotComCall("bnkndcta"); // test
-      lichessCall("caboyd"); // test
+      sortPlayers();
+      players.forEach(player => {
+        addRow(player);
+        if (player.li_profile !== "")
+          lichessCall(player);
+        else if (player.com_profile !== "")
+          chessDotComCall(player);
+        else
+          chessDotComCall(player); // this will fail but add "no data" to player web mmr
+      });
     });
   </script>
 
   <div class="nav">
-
     <ul class="nav">
       <img src="Images/webheader.png" width=100%>
       <li><a href="index.html">Information</a></li>
@@ -74,84 +104,13 @@
       <p> Ratings are internal and based on in-club games. Calculations by <a
           href="http://www.qa76.net/elo">qa76.net</a>. Records display W/L/D. </p>
       <div class="table">
-        <table>
+        <table id="player-table">
           <tr>
             <th>Player</th>
             <th>Rating [IRL]</th>
             <th>Rating [WEB]</th>
             <th>Record</th>
             <th>Profile</th>
-          </tr>
-          <tr>
-            <td>Carter B.</td>
-            <td>1294</td>
-            <td id="caboyd">Loading..</td>
-            <td>8/2/0</td>
-            <td><a href="https://lichess.org/@/caboyd"> Lichess</a></td>
-          </tr>
-          <tr>
-            <td>Jackson G.</td>
-            <td>1251</td>
-            <td id="grassleaf">Loading..</td>
-            <td>5/2/0</td>
-            <td><a href="https://lichess.org/@/grassleaf">Lichess</a> \ <a
-                href="https://www.chess.com/member/jacksongraessle"> Chess.com </a></td>
-          </tr>
-          <tr>
-            <td>Eric C.</td>
-            <td>1221</td>
-            <!-- no online profile  -->
-            <td id="ericc">NO DATA</td>
-            <td>3/2/0</td>
-            <td>N/A</td>
-          </tr>
-          <tr>
-            <td>Drew V.</td>
-            <td>1199</td>
-            <!-- no online profile  -->
-            <td id="drewv">NO DATA</td>
-            <td>1/1/0</td>
-            <td>N/A</td>
-          </tr>
-          <tr>
-            <td>Tyler D.</td>
-            <td>1194</td>
-            <!-- no online profile  -->
-            <td id="tylerd">NO DATA</td>
-            <td>3/4/0</td>
-            <td>N/A</td>
-          </tr>
-          <tr>
-            <td>Siena D.</td>
-            <td>1182</td>
-            <!-- no online profile  -->
-            <td id="sienad">NO DATA</td>
-            <td>0/1/0</td>
-            <td>N/A</td>
-          </tr>
-          <tr>
-            <td>Matt M.</td>
-            <td>1164</td>
-            <!-- no online profile  -->
-            <td id="mattm">NO DATA</td>
-            <td>1/3/0</td>
-            <td>N/A</td>
-          </tr>
-
-          <tr>
-            <td>Patrick A.</td>
-            <td>1162</td>
-            <!-- no online profile  -->
-            <td id="bnkndcta">NO DATA</td>
-            <td>0/2/0</td>
-            <td><a href="https://www.chess.com/member/bnkndcta"> Chess.com </a></td>
-          </tr>
-
-          <tr>
-            <td>Harrison P.</td>
-            <td>1161</td>
-            <td>0/4/0</td>
-            <td>N/A</td>
           </tr>
         </table>
       </div>
