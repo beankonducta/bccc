@@ -26,11 +26,11 @@
     ];
     function buildProfileText(player) {
       if (player.li_profile !== "" && player.com_profile !== "")
-        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a> / <a href="https://chess.com/member${player.com_profile}">Chess.com</a></td>`;
+        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a> / <a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
       else if (player.li_profile !== "")
         return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a></td>`;
       else if (player.com_profile !== "")
-        return `<td><a href="https://chess.com/member${player.com_profile}">Chess.com</a></td>`;
+        return `<td><a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
       else return `<td>...</td>`;
     }
     function sortPlayers() {
@@ -46,7 +46,7 @@
         .then((data) => {
           document.getElementById(player.handle).innerHTML = data.perfs.classical.rating;
         })
-        .catch((e) => document.getElementById(player.handle).innerHTML = "NO DATA");
+        .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
     function chessDotComCall(player) {
       fetch(`https://api.chess.com/pub/player/${player.com_profile}/stats`)
@@ -54,7 +54,7 @@
         .then((data) => {
           document.getElementById(player.handle).innerHTML = data.chess_rapid.last.rating;
         })
-        .catch((e) => document.getElementById(player.handle).innerHTML = "NO DATA");
+        .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
     function addRow(player) {
       var newRow = document.getElementById('player-table').insertRow();
@@ -75,7 +75,7 @@
         else if (player.com_profile !== "")
           chessDotComCall(player);
         else
-          chessDotComCall(player); // this will fail but add "no data" to player web mmr
+          chessDotComCall(player); // this will fail but add "..." to player web mmr
       });
     });
   </script>
