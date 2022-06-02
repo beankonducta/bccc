@@ -146,12 +146,17 @@
         const p1 = getPlayerByInitials(gameSplit[0]);
         const p2 = getPlayerByInitials(gameSplit[1]);
         if(p1 !== null && p2 !== null) {
-          // TODO: this only accounts for wins, should account for draws
-        const p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
-        const p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
-        p1.irl_mmr = p1Rating;
-        p2.irl_mmr = p2Rating;
-        console.log(p1.irl_mmr + " -- " +p2.irl_mmr);
+          var p1Rating = -1;
+          var p2Rating = -1;
+          if(game.includes("beats")) {
+            p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
+            p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
+          } else {
+            p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, .5);
+            p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, .5);
+          }
+          p1.irl_mmr = p1Rating;
+          p2.irl_mmr = p2Rating;
       }
     }
   }
