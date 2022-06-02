@@ -12,18 +12,68 @@
 
 <body>
 
+  <audio id="yourTurn">
+    <source src="Images/yourTurn.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
-    var players = [
-      { name: "Carter B.", irl_mmr: "1294", web_mmr: "Loading..", win: 8, loss: 2, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
-      { name: "Jackson G.", irl_mmr: "1251", web_mmr: "Loading..", win: 5, loss: 2, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
-      { name: "Eric C.", irl_mmr: "1221", web_mmr: "Loading..", win: 3, loss: 2, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
-      { name: "Drew V.", irl_mmr: "1199", web_mmr: "Loading..", win: 1, loss: 1, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
-      { name: "Tyler D.", irl_mmr: "1194", web_mmr: "Loading..", win: 3, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
-      { name: "Sienna D", irl_mmr: "1192", web_mmr: "Loading..", win: 0, loss: 1, tie: 0, li_profile: "", com_profile: "", handle: "siennad" },
-      { name: "Matt M.", irl_mmr: "1164", web_mmr: "Loading..", win: 1, loss: 3, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
-      { name: "Patrick A.", irl_mmr: "1162", web_mmr: "Loading..", win: 0, loss: 2, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
-      { name: "Harrison P.", irl_mmr: "1161", web_mmr: "Loading..", win: 0, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp" }
+
+    // audio
+    var x = document.getElementById("yourTurn");
+
+    function playAudio() {
+      x.play();
+    }
+
+    var games = [
+      "CB beats TD",
+      "EC beats PA",
+      "CB beats TD",
+      "EC beats HP",
+      "CB beats SD",
+      "JG beats MM",
+      "JG beats PA",
+      "MM beats HP",
+      "DV beats TD",
+      "TD beats JG",
+      "CB beats EC",
+      "EC beats CB",
+      "JG beats EC",
+      "TD beats CB",
+      "CB beats DV",
+      "TD beats MM",
+      "JG beats HP",
+      "CB beats MM",
+      "CB beats JG",
+      "JG beats HP",
+      "CB beats HP",
+      "JG beats HP",
+      "TD beats CB",
+      "EC beats CB",
+      "JG beats TD",
+      "HP draws OR",
+      "JG beats CB",
+      "TD beats JG",
+      "HP beats DV",
+      "PA draws CB",
+      "JG beats DV",
+      "PA beats DV",
+      "CB beats JG",
+      "TD beats HP"
     ];
+
+    // array of players, could easily be a database
+    var players = [
+      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 9, loss: 5, tie: 1, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
+      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 9, loss: 4, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
+      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 4, loss: 2, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
+      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
+      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 6, loss: 5, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
+      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 3, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
+      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 2, tie: 1, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
+      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 6, tie: 1, li_profile: "", com_profile: "", handle: "harrisonp" }
+    ];
+
     function buildProfileText(player) {
       if (player.li_profile !== "" && player.com_profile !== "")
         return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a> / <a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
@@ -33,6 +83,7 @@
         return `<td><a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
       else return `<td>...</td>`;
     }
+
     function sortPlayers() {
       players.sort((a, b) => {
         if (a.irl_mmr > b.irl_mmr) return -1;
@@ -40,6 +91,7 @@
         return 0;
       });
     }
+
     function lichessCall(player) {
       fetch(`https://lichess.org/api/user/${player.li_profile}`)
         .then((r) => r.json())
@@ -48,6 +100,7 @@
         })
         .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
+
     function chessDotComCall(player) {
       fetch(`https://api.chess.com/pub/player/${player.com_profile}/stats`)
         .then((r) => r.json())
@@ -56,6 +109,7 @@
         })
         .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
+
     function addRow(player) {
       var newRow = document.getElementById('player-table').insertRow();
       newRow.innerHTML = `
@@ -66,6 +120,7 @@
             ${buildProfileText(player)}
         `;
     }
+
     // https://github.com/moroshko/elo.js/blob/master/elo.js
     function getRatingDelta(myRating, opponentRating, myGameResult) {
       if ([0, 0.5, 1].indexOf(myGameResult) === -1) {
@@ -78,9 +133,40 @@
     function getNewRating(myRating, opponentRating, myGameResult) {
       return myRating + getRatingDelta(myRating, opponentRating, myGameResult);
     }
+
+    // TODO: refactor
+    function parseGames() {
+      for(let game of games) {
+        var gameSplit = []; // array of split text
+        var result = -1; // result of game
+        if(game.includes("beats"))
+          gameSplit = game.split(" beats ")
+        else
+          gameSplit = game.split(" draws ")
+        const p1 = getPlayerByInitials(gameSplit[0]);
+        const p2 = getPlayerByInitials(gameSplit[1]);
+        if(p1 !== null && p2 !== null) {
+        const p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
+        const p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
+        p1.irl_mmr = p1Rating;
+        p2.irl_mmr = p2Rating;
+        console.log(p1.irl_mmr + " -- " +p2.irl_mmr);
+      }
+    }
+  }
+
+    // TODO: refactor
+    function getPlayerByInitials(inits) {
+      for(let player of players) {
+        if(player.initials === inits)
+          return player;
+      }
+      return null;
+    }
+
     window.addEventListener('load', () => {
+      parseGames();
       sortPlayers();
-      console.log(getNewRating(800, 750, 0));
       players.forEach(player => {
         addRow(player);
         if (player.li_profile !== "")
