@@ -146,6 +146,7 @@
         const p1 = getPlayerByInitials(gameSplit[0]);
         const p2 = getPlayerByInitials(gameSplit[1]);
         if(p1 !== null && p2 !== null) {
+          // TODO: this only accounts for wins, should account for draws
         const p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
         const p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
         p1.irl_mmr = p1Rating;
