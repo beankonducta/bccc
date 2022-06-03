@@ -64,14 +64,14 @@
 
     // array of players, could easily be a database
     var players = [
-      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 9, loss: 5, tie: 1, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
-      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 9, loss: 4, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
-      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 4, loss: 2, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
-      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 4, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
-      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 6, loss: 5, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
-      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 3, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
-      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 2, tie: 1, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
-      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 1, loss: 6, tie: 1, li_profile: "", com_profile: "", handle: "harrisonp" }
+      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
+      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
+      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
+      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
+      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
+      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
+      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
+      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp" }
     ];
 
     function buildProfileText(player) {
@@ -145,15 +145,20 @@
           gameSplit = game.split(" draws ")
         const p1 = getPlayerByInitials(gameSplit[0]);
         const p2 = getPlayerByInitials(gameSplit[1]);
+        // TODO: figure out a way to alter mmrs regardless of one player missing from array
         if(p1 !== null && p2 !== null) {
           var p1Rating = -1;
           var p2Rating = -1;
           if(game.includes("beats")) {
             p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
             p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
+            p1.win ++;
+            p2.loss ++;
           } else {
             p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, .5);
             p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, .5);
+            p1.tie ++;
+            p2.tie ++;
           }
           p1.irl_mmr = p1Rating;
           p2.irl_mmr = p2Rating;
