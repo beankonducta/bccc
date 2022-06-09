@@ -26,9 +26,11 @@
     }
 
     var games = [
+      // 4.28
       "CB beats TD",
       "EC beats PA",
       "CB beats TD",
+      // 5.5
       "EC beats HP",
       "CB beats SD",
       "JG beats MM",
@@ -40,6 +42,7 @@
       "EC beats CB",
       "JG beats EC",
       "TD beats CB",
+      // 5.12
       "CB beats DV",
       "TD beats MM",
       "JG beats HP",
@@ -47,31 +50,54 @@
       "CB beats JG",
       "JG beats HP",
       "CB beats HP",
+      // 5.19
       "JG beats HP",
       "TD beats CB",
       "EC beats CB",
       "JG beats TD",
       "HP draws OR",
       "JG beats CB",
+      // 5.26
       "TD beats JG",
       "HP beats DV",
       "PA draws CB",
       "JG beats DV",
       "PA beats DV",
       "CB beats JG",
-      "TD beats HP"
+      "TD beats HP",
+      // 6.2
+      "EC beats JG",
+      "EC beats JG",
+      "PA beats HP",
+      "EC beats DV",
+      "TD beats SD",
+      "EC beats DV",
+      "LX beats CB",
+      "LX beats EC",
+      "MR beats JG",
+      "JG beats MR",
+      "CB beats DV",
+      "JG beats HP",
+      "DV beats MR",
+      "CC beats CB",
+      "TD beats PA",
+      "MR beats JI",
+      "DV beats HP",
+      // 6.9
     ];
 
     // array of players, could easily be a database
     var players = [
-      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd" },
-      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf" },
-      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "ericc" },
-      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "drewv" },
-      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "tylerd" },
-      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "mattm" },
-      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta" },
-      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp" }
+      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd", display: true },
+      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf", display: true },
+      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "ericc", display: true },
+      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "drewv", display: true },
+      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "tylerd", display: true },
+      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "mattm", display: true },
+      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta", display: true },
+      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp", display: true },
+      { name: "SD", initials: "SD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "SD", display: false },
+      { name: "MM", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "MM", display: false }
     ];
 
     function buildProfileText(player) {
@@ -136,56 +162,74 @@
 
     // TODO: refactor
     function parseGames() {
-      for(let game of games) {
+      for (let game of games) {
         var gameSplit = []; // array of split text
         var result = -1; // result of game
-        if(game.includes("beats"))
+        if (game.includes("beats"))
           gameSplit = game.split(" beats ")
         else
           gameSplit = game.split(" draws ")
         const p1 = getPlayerByInitials(gameSplit[0]);
         const p2 = getPlayerByInitials(gameSplit[1]);
         // TODO: figure out a way to alter mmrs regardless of one player missing from array
-        if(p1 !== null && p2 !== null) {
+        if (p1 !== null && p2 !== null) {
           var p1Rating = -1;
           var p2Rating = -1;
-          if(game.includes("beats")) {
+          if (game.includes("beats")) {
             p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, 1);
             p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, 0);
-            p1.win ++;
-            p2.loss ++;
+            p1.win++;
+            p2.loss++;
           } else {
             p1Rating = getNewRating(+p1.irl_mmr, +p2.irl_mmr, .5);
             p2Rating = getNewRating(+p2.irl_mmr, +p1.irl_mmr, .5);
-            p1.tie ++;
-            p2.tie ++;
+            p1.tie++;
+            p2.tie++;
           }
           p1.irl_mmr = p1Rating;
           p2.irl_mmr = p2Rating;
+        }
       }
     }
-  }
 
     // TODO: refactor
     function getPlayerByInitials(inits) {
-      for(let player of players) {
-        if(player.initials === inits)
+      for (let player of players) {
+        if (player.initials === inits)
           return player;
       }
       return null;
     }
 
+    // https://stackoverflow.com/a/54437356
+    function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date()) {
+      const dayOfWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
+      .indexOf(dayName.slice(0, 3).toLowerCase());
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      const fullDays =["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+      if (dayOfWeek < 0) return;
+      refDate.setHours(0, 0, 0, 0);
+      refDate.setDate(refDate.getDate() + +!!excludeToday +
+        (dayOfWeek + 7 - refDate.getDay() - +!!excludeToday) % 7);
+      return `${months[refDate.getMonth()]} ${refDate.getDate()}`;
+    }
+
     window.addEventListener('load', () => {
       parseGames();
       sortPlayers();
+      // populates the date field, switches to 'next week' if it's after noon o clock!
+      document.getElementById('mobile-date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 12 ? true : false)})`
+      document.getElementById('date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 12 ? true : false)})`
       players.forEach(player => {
-        addRow(player);
-        if (player.li_profile !== "")
-          lichessCall(player);
-        else if (player.com_profile !== "")
-          chessDotComCall(player);
-        else
-          chessDotComCall(player); // this will fail but add "..." to player web mmr
+        if (player.display) { // only render player if we have their display flag set to true
+          addRow(player);
+          if (player.li_profile !== "")
+            lichessCall(player);
+          else if (player.com_profile !== "")
+            chessDotComCall(player);
+          else
+            chessDotComCall(player); // this will fail but add "..." to player web mmr
+        }
       });
     });
   </script>
@@ -200,7 +244,7 @@
       <h2> B.C. Chess Club
         <span class="active">will</span>
         <span class="inactive"> will not</span>
-        meet this week (May 19):
+        <span id="mobile-date"></span>
       </h2>
       <p> 8 A.M. \ <a href="https://www.bluecopperslc.com/" target="_blank">Blue Copper 2000</a> \ 401 N 300 W </p>
     </div>
@@ -231,7 +275,7 @@
       <h2> B.C. Chess Club </br>
         <span class="active">will</span> &nbsp;&nbsp;
         <span class="inactive"> will not </span></br>
-        meet this week (May 12)
+        <span id="date"></span>
       </h2>
       <p>Thursday Mornings, 8 A.M.</br>
         <a href="https://www.bluecopperslc.com/" target="_blank">Blue Copper 2000 </a>
