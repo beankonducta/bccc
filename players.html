@@ -258,8 +258,8 @@
       parseGames();
       sortPlayers();
       // populates the date field, switches to 'next week' if it's after noon o clock!
-      document.getElementById('mobile-date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 11 ? true : false)})`
-      document.getElementById('date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 11 ? true : false)})`
+      document.getElementById('mobile-date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 10 ? true : false)})`
+      document.getElementById('date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 10 ? true : false)})`
       players.forEach(player => {
         if (player.display) { // only render player if we have their display flag set to true
           addRow(player);
