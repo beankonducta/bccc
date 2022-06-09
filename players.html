@@ -25,6 +25,19 @@
       x.play();
     }
 
+    /**
+     * GAMES ARRAY
+     * 
+     * All games must follow the format:
+     * INITIALS beats/draws INITIALS
+     * 
+     * Make sure all string values " " are comma separated
+     * 
+     * You can add comments of the dates anywhere as I've done below. 
+     * 
+     * Make sure beats or draws are lowercase  (my code sucks and I'm lazy)
+     * 
+     **/
     var games = [
       // 4.28
       "CB beats TD",
@@ -84,29 +97,48 @@
       "MR beats JI",
       "DV beats HP",
       // 6.9
+      // games go here
     ];
 
-    // array of players, could easily be a database
+    // consts for the web platform the player uses
+    // no need to edit these
+    const NONE = 0;
+    const LI = 1;
+    const CCOM = 2;
+
+
+    /**
+     * PLAYERS ARRAY
+     *
+     * To add a player:
+     * 
+     * Copy paste an existing player --- {name: "Carter B.", ... etc }
+     * Paste it after the last player. Make sure all players are comma separated.
+     * Edit the name and initials. Initials *MUST* correspond with initials in the games array. Initials can be more than 2 characters if needed.
+     * irl_mmr, web_mmr, win, loss and tie can all stay as is (these values are calculated in javascript)
+     * web_platform should either be LI, CCOM or none.
+     * Handle should be either the username of the selected platform, OR some unique identifier for the player (first name, last initial for example)
+     * 
+     * Display is a boolean that lets you show or hide the player. This allows MMRS to be calculated correectly even if we don't want to show an inactive player.
+     * ( for example I've hidden SD because I don't know who the fuck that is )
+     * 
+     **/
     var players = [
-      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "caboyd", com_profile: "", handle: "caboyd", display: true },
-      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "grassleaf", com_profile: "jacksongraessle", handle: "grassleaf", display: true },
-      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "ericc", display: true },
-      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "drewv", display: true },
-      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "tylerd", display: true },
-      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "mattm", display: true },
-      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "bnkndcta", handle: "bnkndcta", display: true },
-      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "harrisonp", display: true },
-      { name: "SD", initials: "SD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "SD", display: false },
-      { name: "MM", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, li_profile: "", com_profile: "", handle: "MM", display: false }
-    ];
+      { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "caboyd", display: true },
+      { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "grassleaf", display: true },
+      { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "ericc", display: true },
+      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "drewv", display: true },
+      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "tylerd", display: true },
+      { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "mattm", display: true },
+      { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: CCOM, handle: "bnkndcta", display: true },
+      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "harrisonp", display: true },
+      { name: "SD", initials: "SD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "SD", display: false }];
 
     function buildProfileText(player) {
-      if (player.li_profile !== "" && player.com_profile !== "")
-        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a> / <a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
-      else if (player.li_profile !== "")
-        return `<td><a href="https://lichess.org/@/${player.li_profile}">Lichess</a></td>`;
-      else if (player.com_profile !== "")
-        return `<td><a href="https://chess.com/member/${player.com_profile}">Chess.com</a></td>`;
+    if (player.web_platform === LI)
+        return `<td><a href="https://lichess.org/@/${player.handle}">Lichess</a></td>`;
+      else if (player.web_platform === CCOM)
+        return `<td><a href="https://chess.com/member/${player.handle}">Chess.com</a></td>`;
       else return `<td>...</td>`;
     }
 
@@ -119,19 +151,27 @@
     }
 
     function lichessCall(player) {
-      fetch(`https://lichess.org/api/user/${player.li_profile}`)
+      fetch(`https://lichess.org/api/user/${player.handle}`)
         .then((r) => r.json())
         .then((data) => {
-          document.getElementById(player.handle).innerHTML = data.perfs.classical.rating;
+          // gets the mmr from the most played gamemode
+          let rates = [];
+          Object.entries(data.perfs).forEach(val => {
+            if(val[0].toLowerCase() !== "puzzle")
+            rates.push(val[1]);
+          })
+          let rate = rates.sort((a, b) => {return a.games > b.games ? -1 : 1})[0].rating;
+          document.getElementById(player.handle).innerHTML = rate;
         })
         .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
 
     function chessDotComCall(player) {
-      fetch(`https://api.chess.com/pub/player/${player.com_profile}/stats`)
+      fetch(`https://api.chess.com/pub/player/${player.handle}/stats`)
         .then((r) => r.json())
         .then((data) => {
-          document.getElementById(player.handle).innerHTML = data.chess_rapid.last.rating;
+          // this just pulls chess_daily, should make more robust like lichess one
+          document.getElementById(player.handle).innerHTML = data.chess_daily.last.rating;
         })
         .catch((e) => document.getElementById(player.handle).innerHTML = "...");
     }
@@ -204,9 +244,9 @@
     // https://stackoverflow.com/a/54437356
     function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date()) {
       const dayOfWeek = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"]
-      .indexOf(dayName.slice(0, 3).toLowerCase());
+        .indexOf(dayName.slice(0, 3).toLowerCase());
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-      const fullDays =["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+      const fullDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
       if (dayOfWeek < 0) return;
       refDate.setHours(0, 0, 0, 0);
       refDate.setDate(refDate.getDate() + +!!excludeToday +
@@ -223,12 +263,12 @@
       players.forEach(player => {
         if (player.display) { // only render player if we have their display flag set to true
           addRow(player);
-          if (player.li_profile !== "")
+          if (player.web_platform === LI)
             lichessCall(player);
-          else if (player.com_profile !== "")
+          else if (player.web_platform === CCOM)
             chessDotComCall(player);
           else
-            chessDotComCall(player); // this will fail but add "..." to player web mmr
+            document.getElementById(player.handle).innerHTML = "...";
         }
       });
     });
