@@ -27,16 +27,16 @@
 
     /**
      * GAMES ARRAY
-     * 
+     *
      * All games must follow the format:
      * INITIALS beats/draws INITIALS
-     * 
+     *
      * Make sure all string values " " are comma separated
-     * 
-     * You can add comments of the dates anywhere as I've done below. 
-     * 
+     *
+     * You can add comments of the dates anywhere as I've done below.
+     *
      * Make sure beats or draws are lowercase  (my code sucks and I'm lazy)
-     * 
+     *
      **/
     var games = [
       // 4.28
@@ -85,8 +85,8 @@
       "EC beats DV",
       "TD beats SD",
       "EC beats DV",
-      "LX beats CB",
-      "LX beats EC",
+      "LH beats CB",
+      "LH beats EC",
       "MR beats JG",
       "JG beats MR",
       "CB beats DV",
@@ -97,7 +97,23 @@
       "MR beats JI",
       "DV beats HP",
       // 6.9
-      // games go here
+     "DV beats JG",
+     "CB beats HP",
+     "LH beats TD",
+     "DV beats MM",
+     "TD beats MM",
+     "CB beats HP",
+     "JG beats HP",
+     "TC beats EC",
+     "LH beats DV",
+     "EC beats TC",
+     "CB beats PA",
+     "LH beats JG",
+     "TC beats DV",
+     "CB beats EC",
+     "TC beats CB",
+     "EC beats DV",
+     "LH beats HP",
     ];
 
     // consts for the web platform the player uses
@@ -111,28 +127,35 @@
      * PLAYERS ARRAY
      *
      * To add a player:
-     * 
+     *
      * Copy paste an existing player --- {name: "Carter B.", ... etc }
      * Paste it after the last player. Make sure all players are comma separated.
      * Edit the name and initials. Initials *MUST* correspond with initials in the games array. Initials can be more than 2 characters if needed.
      * irl_mmr, web_mmr, win, loss and tie can all stay as is (these values are calculated in javascript)
      * web_platform should either be LI, CCOM or none.
      * Handle should be either the username of the selected platform, OR some unique identifier for the player (first name, last initial for example)
-     * 
+     *
      * Display is a boolean that lets you show or hide the player. This allows MMRS to be calculated correectly even if we don't want to show an inactive player.
      * ( for example I've hidden SD because I don't know who the fuck that is )
-     * 
+     *
      **/
     var players = [
       { name: "Carter B.", initials: "CB", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "caboyd", display: true },
       { name: "Jackson G.", initials: "JG", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "grassleaf", display: true },
       { name: "Eric C.", initials: "EC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "ericc", display: true },
-      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "drewv", display: true },
-      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "tylerd", display: true },
+      { name: "Drew V.", initials: "DV", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "drchva", display: true },
+      { name: "Tyler D.", initials: "TD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: LI, handle: "tmdba", display: true },
       { name: "Matt M.", initials: "MM", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "mattm", display: true },
       { name: "Patrick A.", initials: "PA", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: CCOM, handle: "bnkndcta", display: true },
-      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "harrisonp", display: true },
-      { name: "SD", initials: "SD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "SD", display: false }];
+      { name: "Harrison P.", initials: "HP", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "NONE", display: true },
+      { name: "Siena D.", initials: "SD", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "sienad", display: false },
+      { name: "Liam H.", initials: "LH", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "liamh", display: true },
+      { name: "Tyler C.", initials: "TC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "tylerc", display: true },
+      { name: "Matt R.", initials: "MR", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "mattr", display: true },
+      { name: "Cal C.", initials: "CC", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "calc", display: false },
+      { name: "Oscar R.", initials: "OR", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "oscarr", display: false },
+      { name: "Jacob I.", initials: "JI", irl_mmr: "1200", web_mmr: "Loading..", win: 0, loss: 0, tie: 0, web_platform: NONE, handle: "jacobi", display: false }
+      ];
 
     function buildProfileText(player) {
     if (player.web_platform === LI)
@@ -181,9 +204,10 @@
       newRow.innerHTML = `
             <td>${player.name}</td>
             <td>${player.irl_mmr}</td>
-            <td id="${player.handle}">${player.web_mmr}</td>
             <td>${player.win}/${player.loss}/${player.tie}</td>
             ${buildProfileText(player)}
+            <td id="${player.handle}">${player.web_mmr}</td>
+
         `;
     }
 
@@ -261,6 +285,8 @@
       document.getElementById('mobile-date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 10 ? true : false)})`
       document.getElementById('date').textContent = `meet this week (${getNextDayOfTheWeek("Thursday", new Date().getHours() > 10 ? true : false)})`
       players.forEach(player => {
+        if(player.win + player.loss + player.tie < 4) player.display = false;
+        else player.display = true;
         if (player.display) { // only render player if we have their display flag set to true
           addRow(player);
           if (player.web_platform === LI)
@@ -279,6 +305,8 @@
       <img src="Images/webheader.png" width=100%>
       <li><a href="index.html">Information</a></li>
       <li><a href="players.html">Players</a></li>
+    </br></br>
+      <li><a onclick="playAudio(yourTurn)"><u>Whose turn?</u></a></li>
     </ul>
     <div class="mobile">
       <h2> B.C. Chess Club
@@ -289,7 +317,7 @@
       <p> 8 A.M. \ <a href="https://www.bluecopperslc.com/" target="_blank">Blue Copper 2000</a> \ 401 N 300 W </p>
     </div>
   </div>
-  </div>
+
 
   <div class="content">
 
@@ -302,9 +330,9 @@
           <tr>
             <th>Player</th>
             <th>Rating [IRL]</th>
-            <th>Rating [WEB]</th>
             <th>Record</th>
             <th>Profile</th>
+            <th>Rating [WEB]</th>
           </tr>
         </table>
       </div>
@@ -323,6 +351,7 @@
         </br> SLC, UT
       </p>
     </div>
+
 
 </body>
 
